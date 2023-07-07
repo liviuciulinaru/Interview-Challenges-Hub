@@ -41,3 +41,12 @@ yarn sls invoke local --function createOrder --path src/functions/createOrder/mo
 ```
 
 To reset the table just run again `yarn run create:table`
+
+## The list of possible return values
+
+| Scenario                                           | Status Code | Response Body                                                           |
+| -------------------------------------------------- | ----------- | ----------------------------------------------------------------------- |
+| Order already exists                               | 409         | `{"orderId": "<existing order ID>", "message": "Order already exists"}` |
+| New order created                                  | 201         | `{"orderId": "<newly created order ID>", "message": "Order created"}`   |
+| Conditional check failed during DynamoDB operation | 412         | `{"message": "Precondition failed"}`                                    |
+| Unexpected error during function execution         | 500         | `{"message": "Internal Server Error"}`                                  |
