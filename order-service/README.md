@@ -51,3 +51,4 @@ To reset the table just run again `yarn run create:table`
 | New order created                                  | 201         | `{"orderId": "<newly created order ID>", "message": "Order created"}`   |
 | Conditional check failed during DynamoDB operation | 412         | `{"message": "Precondition failed"}`                                    |
 | Unexpected error during function execution         | 500         | `{"message": "Internal Server Error"}`                                  |
+| Rate limit. More than 100 request in 1 minute      | 429         | `{"message": "Too Many Requests", retryAfter: <seconds>}`               |
