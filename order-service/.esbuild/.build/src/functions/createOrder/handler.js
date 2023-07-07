@@ -25,9 +25,18 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/functions/createOrder/handler.ts
 var handler_exports = {};
 __export(handler_exports, {
+  createOrder: () => createOrder,
   main: () => main
 });
 module.exports = __toCommonJS(handler_exports);
+
+// src/libs/api-gateway.ts
+var formatJSONResponse = (statusCode, response) => {
+  return {
+    statusCode,
+    body: JSON.stringify(response)
+  };
+};
 
 // node_modules/@middy/core/index.js
 var import_events = require("events");
@@ -380,20 +389,17 @@ var dynamoDb = new AWS.DynamoDB.DocumentClient({
 });
 var createOrder = async (event) => {
   const params = {
-    TableName: "Orders",
+    TableName: process.env.TABLE_NAME,
     Key: {
       idempotencyKey: event.body.idempotencyKey
     }
   };
   const existingOrder = await dynamoDb.get(params).promise();
   if (existingOrder.Item) {
-    return {
-      statusCode: 409,
-      body: JSON.stringify({
-        orderId: existingOrder.Item.orderId,
-        message: "Order already exists"
-      })
-    };
+    return formatJSONResponse(409, {
+      orderId: existingOrder.Item.orderId,
+      message: "Order already exists"
+    });
   }
   const orderId = "order-" + Date.now();
   const newOrder = {
@@ -404,17 +410,15 @@ var createOrder = async (event) => {
     idempotencyKey: event.body.idempotencyKey
   };
   await dynamoDb.put({ TableName: "Orders", Item: newOrder }).promise();
-  return {
-    statusCode: 201,
-    body: JSON.stringify({
-      orderId,
-      message: "Order created"
-    })
-  };
+  return formatJSONResponse(201, {
+    orderId,
+    message: "Order created"
+  });
 };
 var main = middyfy(createOrder);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  createOrder,
   main
 });
 //# sourceMappingURL=handler.js.map

@@ -1,12 +1,14 @@
 import * as AWS from "aws-sdk"
+import { config } from "dotenv"
 
+config()
 const dynamoDb = new AWS.DynamoDB({
   region: "localhost",
   endpoint: "http://localhost:8000",
 })
 
 async function createTable() {
-  const tableName = "Orders"
+  const tableName = process.env.TABLE_NAME
   await dynamoDb
     .deleteTable({
       TableName: tableName,

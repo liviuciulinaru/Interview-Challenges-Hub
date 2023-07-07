@@ -1,7 +1,8 @@
-import type { AWS } from "@serverless/typescript"
-
 import createOrder from "@functions/createOrder"
-import hello from "@functions/hello"
+import type { AWS } from "@serverless/typescript"
+import { config } from "dotenv"
+
+config()
 
 const serverlessConfiguration: AWS = {
   service: "order-service",
@@ -26,7 +27,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { hello, createOrder },
+  functions: { createOrder },
   package: { individually: true },
   custom: {
     esbuild: {
@@ -46,9 +47,6 @@ const serverlessConfiguration: AWS = {
         inMemory: true, // Enable in-memory storage
         migrate: true, // Automatically create the tables
       },
-      migration: {
-        dir: "offline",
-      },
     },
   },
   resources: {
@@ -56,7 +54,7 @@ const serverlessConfiguration: AWS = {
       OrdersTable: {
         Type: "AWS::DynamoDB::Table",
         Properties: {
-          TableName: "Orders",
+          TableName: process.env.TABLE_NAME,
           AttributeDefinitions: [
             {
               AttributeName: "idempotencyKey",

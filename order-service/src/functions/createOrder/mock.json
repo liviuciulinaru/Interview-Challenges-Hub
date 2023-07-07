@@ -2,5 +2,5 @@
   "headers": {
     "Content-Type": "application/json"
   },
-  "body": "{\"userId\":\"user1\",\"productId\":\"product1\",\"quantity\":1,\"idempotencyKey\":\"key1\"}"
+  "body": "{\"userId\":\"user1\",\"productId\":\"product1\",\"quantity\":1,\"idempotencyKey\":\"key2\"}"
 }
