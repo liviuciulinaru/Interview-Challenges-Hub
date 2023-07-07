@@ -12,10 +12,32 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient({
   endpoint: "http://localhost:8000",
 })
 
-export const createOrder: ValidatedEventAPIGatewayProxyEvent<
-  typeof schema
-> = async (event) => {
+// Define the maximum number of requests allowed per minute
+const RATE_LIMIT = 100
+// Define the time window in milliseconds (1 minute)
+const TIME_WINDOW = 60 * 1000
+
+// Create an object to store the request counts
+const requestCounts: { [ip: string]: number } = {}
+
+const createOrder: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
+  event
+) => {
   const tableName = process.env.TABLE_NAME
+
+  const ip = "127.0.0.1" //event.requestContext.identity.sourceIp
+  const currentTime = Date.now()
+
+  // Check if the IP has exceeded the rate limit
+  if (requestCounts[ip] && requestCounts[ip] >= RATE_LIMIT) {
+    const resetTime = requestCounts[ip] + TIME_WINDOW
+    const secondsLeft = Math.ceil((resetTime - currentTime) / 1000)
+
+    return formatJSONResponse(429, {
+      message: "Too Many Requests",
+      retryAfter: secondsLeft,
+    })
+  }
 
   try {
     // Check if an order with the provided idempotencyKey already exists
@@ -36,7 +58,7 @@ export const createOrder: ValidatedEventAPIGatewayProxyEvent<
     }
 
     // If order does not exist, create a new order
-    const orderId = "order-" + Date.now() // Generate a unique orderId
+    const orderId = "order-" + currentTime // Generate a unique orderId
     const newOrder = {
       orderId,
       userId: event.body.userId,
