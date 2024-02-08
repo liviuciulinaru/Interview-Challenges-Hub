@@ -1,4 +1,6 @@
-# Serverless - AWS Node.js Typescript
+# Order Service
+
+## Serverless - AWS Lambda Node.js Typescript
 
 ## Installation/deployment instructions
 
