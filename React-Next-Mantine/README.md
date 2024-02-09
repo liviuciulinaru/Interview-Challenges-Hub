@@ -1,4 +1,8 @@
-# Mantine Next.js template
+As a user, I should be able to click on a component and react with an emoji and an optional comment. While rescaling the page, the reaction should stay put.
+
+You can draw inspiration from Vercel’s preview function, or Figma comments
+
+## Mantine Next.js template
 
 This is a template for [Next.js](https://nextjs.org/) app router + [Mantine](https://mantine.dev/).
 If you want to use pages router instead, see [next-pages-template](https://github.com/mantinedev/next-pages-template).
