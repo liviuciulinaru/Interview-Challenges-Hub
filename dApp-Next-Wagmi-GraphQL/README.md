@@ -1,11 +1,3 @@
-# dApp Starter Boilerplate
-
-A dApp starter kit template to quick start a dapp project with Next.js + Tailwind CSS + Ethers + wagmi + RainbowKit.
-
-Other tools/components included: Headless UI, Heroicons, Autoprefixer, Sass, PostCSS, ESLint, Prettier.
-
-Live preview for this repo: https://dapp-starter.aris.ac
-
 ## Getting Started
 
 ```bash
@@ -56,12 +48,6 @@ yarn ff
 # Generate contract types from src/contracts/*.json
 yarn compile-contract-types
 ```
-
-### Deployment
-
-The easiest way to deploy your Next.js app is to use [Vercel](https://vercel.com/), by the creators of Next.js.
-
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 ## More
 
